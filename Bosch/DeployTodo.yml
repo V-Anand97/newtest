@@ -1,0 +1,28 @@
+---
+- name: Playbook to Deploy Todo app on Target VM (Ubuntu)
+  hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    ansible_python_interpreter: /bin/python3
+  tasks:
+ 
+  - name: Copy docker-compose.yml
+    copy:
+      src: app/docker-compose.yml
+      dest: tmp/    
+
+ # - name: Test docker-compose.yml 
+ #   community.docker.docker_compose:
+  #    project_src: tmp/
+      #state: present
+  #    files:
+   #     - docker-compose.yml 
+  - name: install docker compose
+    pip: name=docker-compose    
+
+  - name: deploy Docker Compose stack
+    docker_compose:
+     project_src: tmp/
+     files:
+     - docker-compose.yml      
